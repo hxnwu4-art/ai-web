@@ -1,108 +1,278 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>AI</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AI</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
 
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Nunito',sans-serif;
-}
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Nunito',sans-serif;
+    }
 
-body{
-  height:100dvh;
-  background:linear-gradient(160deg,#f3e8ff,#dff7ff);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  overflow:hidden;
-}
+    body{
+      height:100dvh;
+      background:linear-gradient(160deg,#f3e8ff,#dff7ff);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      overflow:hidden;
+      position:relative;
+    }
 
-header{
-  width:100%;
-  padding:40px 20px 10px;
-  text-align:center;
-  font-size:28px;
-  font-weight:800;
-  color:#444;
-}
+    header{
+      width:100%;
+      padding:40px 20px 4px;
+      text-align:center;
+      font-size:24px;
+      font-weight:800;
+      color:#444;
+    }
 
-.description{
-  font-size:14px;
-  color:#666;
-  margin-bottom:10px;
-}
+    .description{
+      font-size:13px;
+      color:#666;
+      margin-bottom:8px;
+      text-align:center;
+    }
 
-.voice-section{
-  flex:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+    .voice-section{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding-bottom:120px; /* 밑에 메뉴, 채팅 입력 공간 확보 */
+      width:100%;
+    }
 
-.voice-button{
-  width:200px;
-  height:200px;
-  border-radius:50%;
-  background:linear-gradient(145deg,#ffd6f9,#c6e8ff);
-  box-shadow:
-    20px 20px 40px rgba(0,0,0,0.15),
-    -20px -20px 40px rgba(255,255,255,0.8);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:60px;
-  cursor:pointer;
-  transition:.2s;
-}
+    .voice-button{
+      width:200px;
+      height:200px;
+      border-radius:50%;
+      background:linear-gradient(145deg,#ffd6f9,#c6e8ff);
+      box-shadow:
+        20px 20px 40px rgba(0,0,0,0.15),
+        -20px -20px 40px rgba(255,255,255,0.8);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:60px;
+      cursor:pointer;
+      transition:.2s;
+    }
 
-.voice-button:active{
-  transform:scale(0.95);
-  box-shadow:
-    inset 15px 15px 30px rgba(0,0,0,0.15),
-    inset -15px -15px 30px rgba(255,255,255,0.8);
-}
-</style>
+    .voice-button:active{
+      transform:scale(0.95);
+      box-shadow:
+        inset 15px 15px 30px rgba(0,0,0,0.15),
+        inset -15px -15px 30px rgba(255,255,255,0.8);
+    }
+
+    /* 채팅 박스 */
+    .chat-container{
+      position:fixed;
+      bottom:140px;
+      left:50%;
+      transform:translateX(-50%);
+      width:90%;
+      max-width:420px;
+      background:rgba(255,255,255,0.6);
+      backdrop-filter:blur(14px);
+      border-radius:24px;
+      padding:10px;
+      box-shadow:
+        6px 6px 15px rgba(0,0,0,0.1),
+        -6px -6px 15px rgba(255,255,255,0.8);
+    }
+
+    #chatBox{
+      max-height:180px;
+      overflow-y:auto;
+      font-size:13px;
+      margin-bottom:8px;
+    }
+
+    .chat-row{
+      margin-bottom:4px;
+    }
+    .chat-user{
+      font-weight:700;
+    }
+    .chat-ai{
+      font-weight:700;
+    }
+
+    .chat-input-row{
+      display:flex;
+      gap:6px;
+    }
+
+    .chat-input-row input{
+      flex:1;
+      padding:8px 10px;
+      border-radius:20px;
+      border:none;
+      outline:none;
+      font-size:13px;
+    }
+
+    .chat-input-row button{
+      padding:8px 12px;
+      border-radius:20px;
+      border:none;
+      background:#c6e8ff;
+      font-size:13px;
+      cursor:pointer;
+    }
+
+    /* 하단 메뉴 */
+    .bottom-menu{
+      position:fixed;
+      bottom:0;
+      left:0;
+      width:100%;
+      padding:16px 10px 26px;
+      display:flex;
+      justify-content:space-around;
+      background:rgba(255,255,255,0.35);
+      backdrop-filter:blur(15px);
+      border-top-left-radius:40px;
+      border-top-right-radius:40px;
+    }
+
+    .menu-button{
+      width:90px;
+      height:90px;
+      border-radius:28px;
+      background:linear-gradient(145deg,#ffffff,#e8e8e8);
+      box-shadow:
+        10px 10px 20px rgba(0,0,0,0.1),
+        -10px -10px 20px rgba(255,255,255,0.8);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      transition:.2s;
+    }
+
+    .menu-button span{
+      font-size:13px;
+      margin-top:6px;
+    }
+
+    .menu-button:active{
+      transform:scale(0.95);
+      box-shadow:
+        inset 6px 6px 12px rgba(0,0,0,0.15),
+        inset -6px -6px 12px rgba(255,255,255,0.8);
+    }
+  </style>
 </head>
 
 <body>
 
-<header>AI</header>
-<div class="description">존댓말 · 다정함 · 자세한 설명 · 화내지 않음</div>
+  <header>AI</header>
+  <div class="description">존댓말 · 다정함 · 자세한 설명 · 화내지 않음</div>
 
-<div class="voice-section">
-  <div class="voice-button" id="voiceBtn">🎤</div>
-</div>
+  <div class="voice-section">
+    <div class="voice-button" id="voiceBtn">🎤</div>
+  </div>
 
-<script>
-/*
-  🔥 AI 성격 프롬프트
-  이걸 나중에 OpenAI API에 system prompt로 넣으면 됨
-*/
+  <!-- 채팅 영역 -->
+  <div class="chat-container">
+    <div id="chatBox"></div>
+    <div class="chat-input-row">
+      <input id="userInput" placeholder="메시지를 입력하세요" />
+      <button id="sendBtn">보내기</button>
+    </div>
+  </div>
 
-const systemPrompt = `
-당신의 이름은 AI입니다.
-항상 존댓말을 사용합니다.
-항상 다정하고 친절하게 말합니다.
-설명은 가능한 한 자세하게 합니다.
-절대로 화를 내지 않습니다.
-공격적이거나 차가운 말투를 사용하지 않습니다.
-사용자를 배려하는 말투를 유지합니다.
-`;
+  <!-- 하단 메뉴 -->
+  <div class="bottom-menu">
+    <div class="menu-button" id="menuChat">
+      💬
+      <span>채팅</span>
+    </div>
 
-console.log("AI 성격 설정 완료");
-console.log(systemPrompt);
+    <div class="menu-button" id="menuImage">
+      🎨
+      <span>이미지</span>
+    </div>
 
-document.getElementById("voiceBtn").addEventListener("click",()=>{
-  alert("다음 단계에서 OpenAI 음성 연결 예정입니다 🎤");
-});
-</script>
+    <div class="menu-button" id="menuHistory">
+      🧠
+      <span>기록</span>
+    </div>
+  </div>
+
+  <script>
+    // 나중에 음성 기능 붙일 때 여기서 처리
+    document.getElementById("voiceBtn").addEventListener("click", () => {
+      alert("음성채팅은 나중에 OpenAI 음성 API 연결할 때 붙일 거임 🎤");
+    });
+
+    // 채팅 보내기
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const chatBox = document.getElementById("chatBox");
+      const text = input.value.trim();
+      if (!text) return;
+
+      // 유저 메시지 표시
+      const userRow = document.createElement("div");
+      userRow.className = "chat-row";
+      userRow.innerHTML = `<span class="chat-user">👤 you:</span> ${text}`;
+      chatBox.appendChild(userRow);
+
+      input.value = "";
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+
+        const data = await res.json();
+
+        const aiRow = document.createElement("div");
+        aiRow.className = "chat-row";
+        aiRow.innerHTML = `<span class="chat-ai">🤖 AI:</span> ${data.reply || "(응답 없음)"}`;
+        chatBox.appendChild(aiRow);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch (e) {
+        const errRow = document.createElement("div");
+        errRow.className = "chat-row";
+        errRow.innerHTML = `<span class="chat-ai">⚠️:</span> 서버 오류가 발생했어요`;
+        chatBox.appendChild(errRow);
+      }
+    }
+
+    document.getElementById("sendBtn").addEventListener("click", sendMessage);
+    document.getElementById("userInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+
+    // 메뉴 버튼들(나중에 페이지 분리하면 여기서 라우팅)
+    document.getElementById("menuChat").addEventListener("click", () => {
+      alert("지금 화면이 채팅 화면이에요 💬");
+    });
+
+    document.getElementById("menuImage").addEventListener("click", () => {
+      alert("2단계에서 이미지 생성 UI랑 /api/image 연결해줄 거임 🎨");
+    });
+
+    document.getElementById("menuHistory").addEventListener("click", () => {
+      alert("나중에 대화 기록 기능 붙일 수 있음 🧠");
+    });
+  </script>
 
 </body>
 </html>

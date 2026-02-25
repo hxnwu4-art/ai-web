@@ -1,4 +1,3 @@
-// api/chat.js
 import Groq from "groq-sdk";
 
 export default async function handler(req, res) {
@@ -9,13 +8,13 @@ export default async function handler(req, res) {
 
     const { message } = req.body;
     if (!message) {
-      return res.status(400).json({ reply: "메시지가 비어있어요." });
+      return res.status(400).json({ reply: "메시지가 비어 있어요." });
     }
 
     const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
     const completion = await client.chat.completions.create({
-      model: "llama3-70b-8192",
+      model: "llama3-70b",
       messages: [
         {
           role: "system",
